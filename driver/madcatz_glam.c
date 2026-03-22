@@ -56,7 +56,10 @@ static int gip_glam_init_input(struct gip_glam *glam)
 	struct input_dev *dev = glam->input.dev;
 	int err;
 
-	input_set_capability(dev, EV_KEY, BTN_MODE);
+	if (xbox_logo_as_f12)
+		input_set_capability(dev, EV_KEY, KEY_F12);
+	else
+		input_set_capability(dev, EV_KEY, BTN_MODE);
 	input_set_capability(dev, EV_KEY, BTN_START);
 	input_set_capability(dev, EV_KEY, BTN_SELECT);
 	input_set_capability(dev, EV_KEY, BTN_A);
@@ -98,7 +101,7 @@ static int gip_glam_op_guide_button(struct gip_client *client, bool down)
 {
 	struct gip_glam *glam = dev_get_drvdata(&client->dev);
 
-	input_report_key(glam->input.dev, BTN_MODE, down);
+	input_report_key(glam->input.dev, xbox_logo_as_f12 ? KEY_F12 : BTN_MODE, down);
 	input_sync(glam->input.dev);
 
 	return 0;

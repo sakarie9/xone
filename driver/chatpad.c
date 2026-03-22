@@ -75,7 +75,10 @@ static int gip_chatpad_init_input(struct gip_chatpad *chatpad)
 {
 	int err;
 
-	input_set_capability(chatpad->input.dev, EV_KEY, BTN_MODE);
+	if (xbox_logo_as_f12)
+		input_set_capability(chatpad->input.dev, EV_KEY, KEY_F12);
+	else
+		input_set_capability(chatpad->input.dev, EV_KEY, BTN_MODE);
 
 	err = input_register_device(chatpad->input.dev);
 	if (err)
@@ -127,7 +130,7 @@ static int gip_chatpad_op_guide_button(struct gip_client *client, bool down)
 {
 	struct gip_chatpad *chatpad = dev_get_drvdata(&client->dev);
 
-	input_report_key(chatpad->input.dev, BTN_MODE, down);
+	input_report_key(chatpad->input.dev, xbox_logo_as_f12 ? KEY_F12 : BTN_MODE, down);
 	input_sync(chatpad->input.dev);
 
 	return 0;

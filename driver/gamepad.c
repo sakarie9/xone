@@ -15,6 +15,10 @@ ushort trigger_rumble_mode = 2;
 MODULE_PARM_DESC(trigger_rumble_mode, "Trigger rumble mode. 0: pressure, 2: disable.");
 module_param(trigger_rumble_mode, ushort, 0644);
 
+bool xbox_logo_as_f12;
+MODULE_PARM_DESC(xbox_logo_as_f12, "Map Xbox logo button to KEY_F12.");
+module_param(xbox_logo_as_f12, bool, 0644);
+
 #define GIP_GP_NAME "Microsoft Xbox Controller"
 
 #define GIP_VENDOR_MICROSOFT 0x045e
@@ -310,7 +314,10 @@ static int gip_gamepad_init_input(struct gip_gamepad *gamepad)
 		input_set_capability(dev, EV_KEY, BTN_GRIPL2);
 	}
 
-	input_set_capability(dev, EV_KEY, BTN_MODE);
+	if (xbox_logo_as_f12)
+		input_set_capability(dev, EV_KEY, KEY_F12);
+	else
+		input_set_capability(dev, EV_KEY, BTN_MODE);
 	input_set_capability(dev, EV_KEY, BTN_START);
 	input_set_capability(dev, EV_KEY, BTN_SELECT);
 	input_set_capability(dev, EV_KEY, BTN_A);
@@ -378,7 +385,7 @@ static int gip_gamepad_op_guide_button(struct gip_client *client, bool down)
 {
 	struct gip_gamepad *gamepad = dev_get_drvdata(&client->dev);
 
-	input_report_key(gamepad->input.dev, BTN_MODE, down);
+	input_report_key(gamepad->input.dev, xbox_logo_as_f12 ? KEY_F12 : BTN_MODE, down);
 	input_sync(gamepad->input.dev);
 
 	return 0;
