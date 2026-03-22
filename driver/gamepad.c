@@ -15,7 +15,6 @@ ushort trigger_rumble_mode = 2;
 MODULE_PARM_DESC(trigger_rumble_mode, "Trigger rumble mode. 0: pressure, 2: disable.");
 module_param(trigger_rumble_mode, ushort, 0644);
 
-bool xbox_logo_as_f12;
 MODULE_PARM_DESC(xbox_logo_as_f12, "Map Xbox logo button to KEY_F12.");
 module_param(xbox_logo_as_f12, bool, 0644);
 

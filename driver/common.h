@@ -11,7 +11,7 @@
 
 #include "../bus/bus.h"
 
-extern bool xbox_logo_as_f12;
+bool xbox_logo_as_f12;
 
 struct gip_battery {
 	struct power_supply *supply;
